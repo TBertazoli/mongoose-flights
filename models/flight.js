@@ -22,16 +22,20 @@ const flightSchema = new mongoose.Schema(
       enum: ["IAH", "AUS", "DFW", "DEN", "LAX", "SAN", "VCP", "FLL", "MIA"],
       default: "DEN",
     },
-    flighNo: {
+    flightNo: {
       type: Number,
       required: {
-        range: [10, 9999],
+        range: {
+          min: 10,
+          max: 9999,
+        },
       },
     },
     departs: {
       type: Date,
       default: function () {
-        return new Date().getFullYear() + 1;
+        const date = Date.now() + 365;
+        return date;
       },
     },
   },
