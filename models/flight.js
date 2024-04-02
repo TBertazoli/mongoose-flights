@@ -34,7 +34,7 @@ const flightSchema = new mongoose.Schema(
     departs: {
       type: Date,
       default: function () {
-        const date = Date.now() + 365;
+        const date = new Date().setFullYear(new Date().getFullYear() + 1);
         return date;
       },
     },
