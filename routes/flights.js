@@ -8,6 +8,8 @@ router.get("/", flightsCtrl.index);
 //Get new flight form
 router.get("/new", flightsCtrl.new);
 
+router.get("/:id", flightsCtrl.show);
+
 //Create new flight
 router.post("/", flightsCtrl.create);
 
