@@ -8,7 +8,13 @@ module.exports = {
 };
 
 async function index(req, res) {
-  const flights = await Flight.find({});
+  let flights = await Flight.find({});
+  flights = flights.map((flight) => {
+    return {
+      ...flight._doc,
+      departs: flight.departs.toLocaleDateString(),
+    };
+  });
   res.render("flights/index", { flights });
 }
 
