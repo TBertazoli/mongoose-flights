@@ -13,14 +13,15 @@
       </thead>
       <tbody>
         <% flights.forEach(flight => { %>
-        <tr>
-          <td><%= flight.airline %></td>
+
+        <tr class=<%= flight.past? 'past':'' %>>
+          <td><%= flight.airline %> <%= flight.past %></td>
           <td><%= flight.airport %></td>
           <td><%= flight.flightNo %></td>
           <td><%= flight.departs %></td>
           <td><a href="/flights/<%= flight._id %>">View</a></td>
         </tr>
-        <% }); %>
+        <% }) %>
       </tbody>
     </table>
   </div>
