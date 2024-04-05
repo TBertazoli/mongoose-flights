@@ -54,4 +54,39 @@
   <% } else { %>
   <h5>No Destinations Available for this location</h5>
   <% } %>
+
+  <!-- add tickets -->
+  <form
+    id="add-ticket-form"
+    method="POST"
+    action="/flights/<%= flight._id %>/tickets"
+  >
+    <label>Seat:</label>
+    <input name="seat" required pattern="[A-F][1-9]\d?" />
+    <label>Price:</label>
+    <input type="number" name="price" />
+    <input type="submit" value="Add ticket" />
+  </form>
+
+  <!-- Form to render the tickets of the flight -->
+  <% if (tickets.length) { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Tickets</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% tickets.forEach(function(t) { %>
+      <tr>
+        <td><%= t.seat %></td>
+        <td><%= t.price %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <% } else { %>
+  <h5>No Tickets Available for this destination</h5>
+  <% } %>
 </body>

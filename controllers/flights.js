@@ -1,4 +1,5 @@
 const Flight = require("../models/flight");
+const Ticket = require("../models/ticket");
 
 module.exports = {
   index,
@@ -31,9 +32,14 @@ async function show(req, res) {
     { code: "MIA", name: "Miami International Airport" },
   ];
   const flight = await Flight.findById(req.params.id);
-  const destinations = res.render("flights/show", {
+  const tickets = await Ticket.find({ flight: flight._id });
+  flight.destinations = flight.destinations.sort(
+    (a, b) => a.arrival - b.arrival
+  );
+  res.render("flights/show", {
     flight,
     airports: airports.filter((airport) => airport.code !== flight.airport),
+    tickets,
   });
 }
 
