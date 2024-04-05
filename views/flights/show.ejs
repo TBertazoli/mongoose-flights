@@ -1,92 +1,135 @@
 <%- include('../partials/header') %>
 <body>
   <!-- The flight object is render here -->
-  <div class="main">
-    <div>Airline:</div>
-    <div><%= flight.airline %></div>
-    <div>Airport</div>
-    <div><%= flight.airport %></div>
-    <div>Flight<br />#</div>
-    <div><%= flight.flightNo %></div>
-    <div>Departure</div>
-    <div><%= flight.departs %></div>
+  <div class="container">
+    <div class="card m-2">
+      <div class="card-body">
+        <h1>Flight Details</h1>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Arline</th>
+              <th>Airport</th>
+              <th>Flight</th>
+              <th>Departure</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= flight.airline %></td>
+              <td><%= flight.airport %></td>
+              <td><%= flight.flightNo %></td>
+              <td><%= flight.departs %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Form to add a destination to the flight -->
+    <div class="card m-2">
+      <div class="card-body">
+        <h1>Destinations</h1>
+        <form
+          id="add-destination-form"
+          method="POST"
+          action="/flights/<%= flight._id %>/destinations"
+        >
+          <label for="airport" class="form-label">Destination:</label>
+          <select class="form-select" name="airport" id="airport">
+            <% airports.forEach(a => { %>
+            <option value="<%= a.code %>"><%= a.name%></option>
+            <% }) %>
+          </select>
+          <label for="arrival" class="form-label">Arrival</label>
+          <input
+            class="form-control"
+            id="arrival"
+            type="datetime-local"
+            name="arrival"
+          />
+          <input
+            type="submit"
+            class="btn btn-primary mt-2"
+            value="Add destination"
+          />
+        </form>
+
+        <!-- Form to render the destinations of the flight -->
+        <% if (flight.destinations.length) { %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Destination</th>
+              <th>Arrival</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% flight.destinations.forEach(function(d) { %>
+            <tr>
+              <!-- .toLocaleDateString() provides a more friendly date format -->
+
+              <td><%= d.airport %></td>
+              <td><%= d.arrival.toLocaleString() %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <% } else { %>
+        <h5>No Destinations Available for this location</h5>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- add tickets -->
+    <div class="card m-2">
+      <div class="card-body">
+        <h1>Tickets</h1>
+
+        <form
+          id="add-ticket-form"
+          method="POST"
+          action="/flights/<%= flight._id %>/tickets"
+        >
+          <label for="seat" class="form-label">Seat:</label>
+          <input
+            id="seat"
+            class="form-control"
+            name="seat"
+            required
+            pattern="[A-F][1-9]\d?"
+          />
+          <label for="price" class="form-label">Price:</label>
+          <input id="price" class="form-control" type="number" name="price" />
+          <input
+            type="submit"
+            class="btn btn-primary mt-2"
+            value="Add ticket"
+          />
+        </form>
+
+        <!-- Form to render the tickets of the flight -->
+        <% if (tickets.length) { %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Tickets</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% tickets.forEach(function(t) { %>
+            <tr>
+              <td><%= t.seat %></td>
+              <td><%= t.price %></td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+        <% } else { %>
+        <h5>No Tickets Available for this destination</h5>
+        <% } %>
+      </div>
+    </div>
   </div>
-
-  <!-- Form to add a destination to the flight -->
-  <form
-    id="add-destination-form"
-    method="POST"
-    action="/flights/<%= flight._id %>/destinations"
-  >
-    <label>Destination:</label>
-
-    <select name="airport">
-      <% airports.forEach(a => { %>
-      <option value="<%= a.code %>"><%= a.name%></option>
-      <% }) %>
-    </select>
-
-    <label>Arrival</label>
-    <input type="datetime-local" name="arrival" />
-    <input type="submit" value="Add destination" />
-  </form>
-
-  <!-- Form to render the destinations of the flight -->
-  <% if (flight.destinations.length) { %>
-  <table>
-    <thead>
-      <tr>
-        <th>Destination</th>
-        <th>Arrival</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% flight.destinations.forEach(function(d) { %>
-      <tr>
-        <!-- .toLocaleDateString() provides a more friendly date format -->
-
-        <td><%= d.airport %></td>
-        <td><%= d.arrival.toLocaleString() %></td>
-      </tr>
-      <% }); %>
-    </tbody>
-  </table>
-  <% } else { %>
-  <h5>No Destinations Available for this location</h5>
-  <% } %>
-
-  <!-- add tickets -->
-  <form
-    id="add-ticket-form"
-    method="POST"
-    action="/flights/<%= flight._id %>/tickets"
-  >
-    <label>Seat:</label>
-    <input name="seat" required pattern="[A-F][1-9]\d?" />
-    <label>Price:</label>
-    <input type="number" name="price" />
-    <input type="submit" value="Add ticket" />
-  </form>
-
-  <!-- Form to render the tickets of the flight -->
-  <% if (tickets.length) { %>
-  <table>
-    <thead>
-      <tr>
-        <th>Tickets</th>
-        <th>Price</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% tickets.forEach(function(t) { %>
-      <tr>
-        <td><%= t.seat %></td>
-        <td><%= t.price %></td>
-      </tr>
-      <% }); %>
-    </tbody>
-  </table>
-  <% } else { %>
-  <h5>No Tickets Available for this destination</h5>
-  <% } %>
 </body>

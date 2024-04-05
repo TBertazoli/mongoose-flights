@@ -10,6 +10,7 @@ module.exports = {
 
 async function index(req, res) {
   let flights = await Flight.find({});
+  flights = flights.sort((a, b) => a.departs - b.departs);
   flights = flights.map((flight) => {
     return {
       ...flight._doc,
