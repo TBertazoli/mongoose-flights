@@ -19,8 +19,22 @@ async function index(req, res) {
 }
 
 async function show(req, res) {
+  const airports = [
+    { code: "IAH", name: "George Bush Intercontinental Airport" },
+    { code: "AUS", name: "Austin-Bergstrom International Airport" },
+    { code: "DFW", name: "Dallas/Fort Worth International Airport" },
+    { code: "DEN", name: "Denver International Airport" },
+    { code: "LAX", name: "Los Angeles International Airport" },
+    { code: "SAN", name: "San Diego International Airport" },
+    { code: "VCP", name: "Viracopos International Airport" },
+    { code: "FLL", name: "Fort Lauderdale-Hollywood International Airport" },
+    { code: "MIA", name: "Miami International Airport" },
+  ];
   const flight = await Flight.findById(req.params.id);
-  res.render("flights/show", { flight });
+  const destinations = res.render("flights/show", {
+    flight,
+    airports: airports.filter((airport) => airport.code !== flight.airport),
+  });
 }
 
 function newFlight(req, res) {
